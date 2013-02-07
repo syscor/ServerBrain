@@ -9,12 +9,15 @@ using Microsoft.SPOT.Net.NetworkInformation;
 
 namespace BrilliantIdea.WebServer
 {
-    public class Server
+    public class Server : IDisposable
     {
         public int PortNumber { get; private set; }
         private readonly Socket _listeningSocket;
+        private Thread webserverThread;
         private Hashtable _responses = new Hashtable();
         private OutputPort _onboardLed;
+        private const int Backlog = 10;
+
 
         /// <summary>
         /// Create an instance runing in a separate thread
@@ -47,7 +50,7 @@ namespace BrilliantIdea.WebServer
             _listeningSocket.Listen(1);
 
             //listen for and process incoming request
-            var webserverThread = new Thread(WaitingForRequest);
+            webserverThread = new Thread(WaitingForRequest);
             webserverThread.Start();
 
         }
@@ -58,13 +61,13 @@ namespace BrilliantIdea.WebServer
             {
                 try
                 {
-                   //wait for a client to connect
+                    //wait for a client to connect
                     Socket clientSocket = _listeningSocket.Accept();
                     //wait for data to arrive
                     bool dataReady = clientSocket.Poll(5000000, SelectMode.SelectRead);
                     //if dataReady is true and there are bytes available to read,
                     //then you have a good connection
-                    if (dataReady && clientSocket.Available>0 && clientSocket.Available<Settings.MaxRequestsize)
+                    if (dataReady && clientSocket.Available > 0 && clientSocket.Available < Settings.MaxRequestsize)
                     {
                         var buffer = new byte[clientSocket.Available];
                         var bytesRead = clientSocket.Receive(buffer);
@@ -78,11 +81,37 @@ namespace BrilliantIdea.WebServer
                 }
                 catch (Exception exception)
                 {
-                   Debug.Print(exception.Message);
+                    Debug.Print(exception.Message);
                 }
             }
-// ReSharper disable FunctionNeverReturns
+            // ReSharper disable FunctionNeverReturns
         }
+
 // ReSharper restore FunctionNeverReturns
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private bool _disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _listeningSocket.Close();
+                    webserverThread.Abort();
+                }
+                _disposed = true;
+            }
+        }
+
+        ~Server()
+        {
+            Dispose(false);
+        }
+
     }
 }

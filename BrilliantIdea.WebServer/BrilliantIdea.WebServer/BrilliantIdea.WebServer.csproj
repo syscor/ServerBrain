@@ -36,6 +36,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="WebServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SPOT.Hardware" />
