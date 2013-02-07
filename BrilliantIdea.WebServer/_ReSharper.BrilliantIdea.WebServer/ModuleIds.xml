@@ -1,3 +1,4 @@
 <Modules>
   <Module PersistentId="4A6CB0FD-0C29-4F56-813C-4B26FE010A27" ModuleId="BrilliantIdea.WebServer" />
+  <Module PersistentId="7F71F4A4-C257-45DA-BD17-EC78953D6D6B" ModuleId="BrilliantIdea.WebApi" />
 </Modules>

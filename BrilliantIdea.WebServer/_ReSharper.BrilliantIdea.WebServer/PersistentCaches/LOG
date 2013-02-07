@@ -1,1 +1,5 @@
-2013/02/07-12:12:33.952 1df8 Delete type=3 #1
+2013/02/07-14:57:14.415 1ecc Recovering log #3
+2013/02/07-14:57:14.415 1ecc Level-0 table #5: started
+2013/02/07-14:57:14.447 1ecc Level-0 table #5: 10772 bytes OK
+2013/02/07-14:57:14.511 1ecc Delete type=0 #3
+2013/02/07-14:57:14.511 1ecc Delete type=3 #2
